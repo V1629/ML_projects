@@ -22,7 +22,7 @@ class PredictPipeline:
         except Exception as e:
             raise CustomException(e, sys)
 
-
+class CustomData:
     def __init__(self,
                  gender: str,
                  race_ethnicity: str,
@@ -44,14 +44,19 @@ class PredictPipeline:
         try:
             custom_data_input_dict = {
                 "gender": [self.gender],
-                "race_ethnicity":[self.race_ethnicity],
-                "parental_level_of_education":[self.parental_level_of_education],
+                "race/ethnicity":[self.race_ethnicity],
+                "parental level of education":"none",
                 "lunch":[self.lunch],
-                "test_preparation_course":[self.test_preparation_course],
-                "reading_score":[self.reading_score],
-                "writing_score":[self.writing_score]
+                "test preparation course":"none",
+                "reading score":[self.reading_score],
+                "writing score":[self.writing_score]
             }
-            return pd.DataFrame(custom_data_input_dict)
+            df = pd.DataFrame(custom_data_input_dict)
+            if df.isnull().any().any():
+                print(self.gender, self.race_ethnicity, self.parental_level_of_education, self.lunch, self.test_preparation_course, self.reading_score, self.writing_score)
+                raise ValueError("Input data contains missing values.")
+            logging.info("Dataframe Gathered")
+            return df
         
         except Exception as e:
             raise CustomException(e, sys)

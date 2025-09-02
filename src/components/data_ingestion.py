@@ -26,6 +26,16 @@ class DataIngestion:
         try:
             df = pd.read_csv('notebook/exams.csv')
             logging.info("Dataset read as dataframe")
+
+            for col in df.columns:
+                if df[col].isnull().any():
+                    if pd.api.types.is_numeric_dtype(df[col]):
+                        max_val = df[col].max()
+                        df[col].fillna(max_val, inplace=True)
+                    else:
+                        # For non-numeric columns, fill with the most frequent value
+                        mode_val = df[col].mode()[0]
+                        df[col].fillna(mode_val, inplace=True)
             os.makedirs(os.path.dirname(self.ingestion_config.train_data_path),exist_ok=True)
             df.to_csv(self.ingestion_config.raw_data_path, index=False, header=True)
             logging.info("Train test split initiated")

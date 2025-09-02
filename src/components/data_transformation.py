@@ -40,7 +40,7 @@ class DataTransformation:
             cat_pipeline = Pipeline(
                 steps=[
                     ('imputer', SimpleImputer(strategy='most_frequent')),##to handle missing values
-                    ('one_hot_encoder', OneHotEncoder()),##to convert categorical values to numerical values
+                    ('one_hot_encoder', OneHotEncoder(handle_unknown = 'ignore')),##to convert categorical values to numerical values
                     ('scaler', StandardScaler(with_mean=False)) ###scaling without mean centering
                 ]
             )
@@ -62,6 +62,10 @@ class DataTransformation:
 
 
     def initiate_data_transformation(self, train_path, test_path):
+                # Before transformation
+        if input_feature_test_df.isnull().any().any():
+            logging.warning("Missing values detected in test data before transformation.")
+            print(input_feature_test_df.isnull().sum())
         try:
             train_df = pd.read_csv(train_path)
             test_df = pd.read_csv(test_path)
