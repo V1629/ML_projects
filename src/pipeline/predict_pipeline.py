@@ -29,15 +29,21 @@ class CustomData:
                  parental_level_of_education: str,
                  lunch: str,
                  test_preparation_course: str,
-                    reading_score: int,
-                    writing_score: int):
+                 reading_score,
+                 writing_score):
         self.gender = gender
         self.race_ethnicity = race_ethnicity
         self.parental_level_of_education = parental_level_of_education
         self.lunch = lunch
         self.test_preparation_course = test_preparation_course
-        self.reading_score = reading_score
-        self.writing_score = writing_score
+        # Validate and convert scores
+        if reading_score is None or reading_score == '' or writing_score is None or writing_score == '':
+            raise ValueError("Reading and Writing scores must be provided and not empty.")
+        try:
+            self.reading_score = int(reading_score)
+            self.writing_score = int(writing_score)
+        except Exception:
+            raise ValueError("Reading and Writing scores must be valid integers.")
 
 
     def get_data_as_dataframe(self):
@@ -45,14 +51,15 @@ class CustomData:
             custom_data_input_dict = {
                 "gender": [self.gender],
                 "race/ethnicity":[self.race_ethnicity],
-                "parental level of education":"none",
+                "parental level of education":[self.parental_level_of_education],
                 "lunch":[self.lunch],
-                "test preparation course":"none",
+                "test preparation course":[self.test_preparation_course],
                 "reading score":[self.reading_score],
                 "writing score":[self.writing_score]
             }
+            print("executed")
             df = pd.DataFrame(custom_data_input_dict)
-            if df.isnull().any().any():
+            if df.isnull().any().any() or (df == '').any().any():
                 print(self.gender, self.race_ethnicity, self.parental_level_of_education, self.lunch, self.test_preparation_course, self.reading_score, self.writing_score)
                 raise ValueError("Input data contains missing values.")
             logging.info("Dataframe Gathered")
