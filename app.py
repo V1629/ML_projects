@@ -22,22 +22,22 @@ def predict():
     else:
         data =CustomData(
             gender = request.form.get('gender'),
-            race_ethnicity = request.form.get('race/ethnicity'),
-            parental_level_of_education = request.form.get('parental_level_of education'),
+            race_ethnicity = request.form.get('race_ethnicity'),
+            parental_level_of_education = request.form.get('parental_level_of_education'),
             lunch = request.form.get('lunch'),
             test_preparation_course = request.form.get('test_preparation_course'),
             reading_score = int(request.form.get('reading_score')),
             writing_score = int(request.form.get('writing_score'))
         )
-        print(
-    request.form.get('gender'),
-    request.form.get('race/ethnicity'),
-    request.form.get('parental_level_of_education'),
-    request.form.get('lunch'),
-    request.form.get('test_preparation_course'),
-    request.form.get('reading score'),
-    request.form.get('writing score')
-)
+#         print(
+#     request.form.get('gender'),
+#     request.form.get('race/ethnicity'),
+#     request.form.get('parental_level_of_education'),
+#     request.form.get('lunch'),
+#     request.form.get('test_preparation_course'),
+#     request.form.get('reading score'),
+#     request.form.get('writing score')
+# )
         pred_df = data.get_data_as_dataframe()
         print(pred_df)
         predict_pipeline = PredictPipeline()
